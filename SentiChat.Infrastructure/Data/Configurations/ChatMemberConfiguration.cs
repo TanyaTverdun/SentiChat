@@ -1,0 +1,28 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SentiChat.Domain.Entities;
+
+namespace SentiChat.Infrastructure.Data.Configurations;
+
+public class ChatMemberConfiguration : IEntityTypeConfiguration<ChatMember>
+{
+    public void Configure(EntityTypeBuilder<ChatMember> builder)
+    {
+        builder
+            .HasKey(cm => new
+            {
+                cm.ChatId,
+                cm.UserId
+            });
+
+        builder
+            .HasOne(cm => cm.User)
+            .WithMany(u => u.ChatMembers)
+            .HasForeignKey(cm => cm.UserId);
+
+        builder
+            .HasOne(cm => cm.Chat)
+            .WithMany(c => c.Members)
+            .HasForeignKey(cm => cm.ChatId);
+    }
+}
