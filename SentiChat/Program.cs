@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using SentiChat.Extensions;
 using SentiChat.Infrastructure.Data;
+using SentiChat.Middlewares;
+using SentiChat.Application;
+using SentiChat.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,8 +27,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerDocumentation();
 
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure();
+
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
