@@ -45,12 +45,17 @@ public class ExceptionMiddleware
         switch (exception)
         {
             case ArgumentException:
-                statusCode = (int)HttpStatusCode.BadRequest;
+                statusCode = (int)HttpStatusCode.BadRequest; //400
+                errorMessage = exception.Message;
+                break;
+
+            case UnauthorizedAccessException:
+                statusCode = (int)HttpStatusCode.Unauthorized; //401
                 errorMessage = exception.Message;
                 break;
 
             default:
-                statusCode = (int)HttpStatusCode.InternalServerError;
+                statusCode = (int)HttpStatusCode.InternalServerError; //500
                 errorMessage = "An unexpected error occurred.";
                 break;
         }
