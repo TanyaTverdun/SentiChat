@@ -11,18 +11,21 @@ public class UserService : IUserService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserRepository _userRepository;
     private readonly IPasswordHasher _passwordHasher;
+    private readonly IJwtProvider _jwtProvider;
 
     public UserService(
         IUnitOfWork unitOfWork, 
         IUserRepository userRepository, 
-        IPasswordHasher passwordHasher)
+        IPasswordHasher passwordHasher,
+        IJwtProvider jwtProvider)
     {
         this._unitOfWork = unitOfWork;
         this._userRepository = userRepository;
         this._passwordHasher = passwordHasher;
+        this._jwtProvider = jwtProvider;
     }
 
-    public async Task<Guid> RegisterUserAsync(
+    public async Task<string> RegisterUserAsync(
         RegisterUserDto registerUser,
         CancellationToken cancellationToken)
     {
@@ -52,10 +55,13 @@ public class UserService : IUserService
 
         await this._unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return userId;
+        var token = this._jwtProvider
+            .GenerateToken(newUser);
+
+        return token;
     }
 
-    public async Task<Guid> LoginUserAsync(
+    public async Task<string> LoginUserAsync(
         LoginUserDto loginUserDto, 
         CancellationToken cancellationToken)
     {
@@ -81,6 +87,9 @@ public class UserService : IUserService
                 "Invalid email or password.");
         }
 
-        return user.Id;
+        var token = this._jwtProvider
+            .GenerateToken(user);
+
+        return token;
     }
 }

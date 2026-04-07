@@ -11,6 +11,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddScoped<IUserService, UserService>();
+
         services.AddValidatorsFromAssemblyContaining<RegisterUserDtoValidator>();
 
         return services;
