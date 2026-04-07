@@ -20,6 +20,8 @@ builder.Services.AddDbContext<SentiChatDbContext>(options =>
         }
     )
 );
+
+builder.Services.AddApiAuthentication(builder.Configuration);
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -42,6 +44,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
