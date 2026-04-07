@@ -54,4 +54,33 @@ public class UserService : IUserService
 
         return userId;
     }
+
+    public async Task<Guid> LoginUserAsync(
+        LoginUserDto loginUserDto, 
+        CancellationToken cancellationToken)
+    {
+        var user = await this._userRepository
+            .GetByEmailAsync(
+                loginUserDto.Email,
+                cancellationToken);
+
+        if (user == null)
+        {
+            throw new UnauthorizedAccessException(
+                "Invalid email or password.");
+        }
+
+        var isPasswordValid = this._passwordHasher
+            .VerifyPassword(
+                user.PasswordHash,
+                loginUserDto.Password);
+
+        if (!isPasswordValid)
+        {
+            throw new UnauthorizedAccessException(
+                "Invalid email or password.");
+        }
+
+        return user.Id;
+    }
 }
