@@ -11,5 +11,7 @@ public static partial class UserMapper
     [MapperIgnoreTarget(nameof(User.SentMessages))]
     [MapperIgnoreTarget(nameof(User.ChatMembers))]
     [MapperIgnoreSource(nameof(RegisterUserDto.Password))]
-    public static partial User ToEntity(this RegisterUserDto dto, Guid id, string passwordHash);
+    public static partial User ToEntity(
+        this RegisterUserDto dto, 
+        Guid id, string passwordHash);
 }
