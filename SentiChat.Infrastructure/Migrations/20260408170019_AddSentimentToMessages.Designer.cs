@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SentiChat.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using SentiChat.Infrastructure.Data;
 namespace SentiChat.Infrastructure.Migrations
 {
     [DbContext(typeof(SentiChatDbContext))]
-    partial class SentiChatDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260408170019_AddSentimentToMessages")]
+    partial class AddSentimentToMessages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

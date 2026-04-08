@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SentiChat.Domain.Entities;
+using SentiChat.Domain.Enums;
 
 namespace SentiChat.Infrastructure.Data.Configurations;
 
@@ -23,9 +24,8 @@ public class MessageConfiguration : IEntityTypeConfiguration<Message>
             .IsRequired();
 
         builder
-            .Property(m => m.SentimentResult)
-            .HasMaxLength(50)
-            .IsUnicode(false);
+            .Property(m => m.Sentiment)
+            .HasDefaultValue(SentimentType.Neutral);
 
         builder
             .HasOne(m => m.Sender)

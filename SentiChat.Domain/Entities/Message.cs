@@ -1,4 +1,6 @@
-﻿namespace SentiChat.Domain.Entities;
+﻿using SentiChat.Domain.Enums;
+
+namespace SentiChat.Domain.Entities;
 
 public class Message
 {
@@ -13,5 +15,5 @@ public class Message
     public string Text { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    public string? SentimentResult { get; set; }
+    public SentimentType Sentiment { get; set; } = SentimentType.Neutral;
 }
