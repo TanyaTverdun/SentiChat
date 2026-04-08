@@ -54,6 +54,11 @@ public class ExceptionMiddleware
                 errorMessage = exception.Message;
                 break;
 
+            case KeyNotFoundException:
+                statusCode = (int)HttpStatusCode.NotFound; // 404
+                errorMessage = exception.Message;
+                break;
+
             default:
                 statusCode = (int)HttpStatusCode.InternalServerError; //500
                 errorMessage = "An unexpected error occurred.";
