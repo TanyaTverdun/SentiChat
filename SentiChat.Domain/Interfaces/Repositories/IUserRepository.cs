@@ -26,4 +26,14 @@ public interface IUserRepository : IBaseRepository<User>
     Task<User?> GetByEmailAsync(
         string email, 
         CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Retrieves a specific user by their unique identifier.
+    /// </summary>
+    /// <param name="id">The unique identifier (GUID) of the user to retrieve.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>The user entity if found; otherwise, null.</returns>
+    Task<User?> GetByIdAsync(
+        Guid id, 
+        CancellationToken cancellationToken);
 }

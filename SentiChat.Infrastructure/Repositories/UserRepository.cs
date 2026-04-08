@@ -31,4 +31,14 @@ public class UserRepository : BaseRepository<User>, IUserRepository
                 u => u.Email == email,
                 cancellationToken);
     }
+
+    public async Task<User?> GetByIdAsync(
+        Guid id, 
+        CancellationToken cancellationToken)
+    {
+        return await this._dbSet
+            .FirstOrDefaultAsync(
+                u => u.Id == id, 
+                cancellationToken);
+    }
 }
