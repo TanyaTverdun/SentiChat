@@ -1,4 +1,5 @@
 ﻿using Riok.Mapperly.Abstractions;
+using SentiChat.Application.DTOs.Chats;
 using SentiChat.Application.DTOs.Users;
 using SentiChat.Domain.Entities;
 
@@ -14,4 +15,12 @@ public static partial class UserMapper
     public static partial User ToEntity(
         this RegisterUserDto dto, 
         Guid id, string passwordHash);
+
+    public static AuthResponseDto MapToAuthResponseDto(this string token)
+    {
+        return new AuthResponseDto
+        {
+            Token = token
+        };
+    }
 }

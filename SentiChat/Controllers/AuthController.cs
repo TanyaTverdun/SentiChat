@@ -2,9 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using SentiChat.Application.DTOs.Users;
 using SentiChat.Application.Interfaces;
+using SentiChat.Application.Mappers;
 
 namespace SentiChat.Controllers;
 
+/// <summary>
+/// Handles user authentication, including registration and login processes.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
@@ -26,7 +30,8 @@ public class AuthController : ControllerBase
     /// <summary>
     /// Registers a new user in the system.
     /// </summary>
-    /// <param name="registerDto">User registration details including email and password.</param>
+    /// <param name="registerUserDto">User registration details including email and password.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>Returns the unique identifier (GUID) of the newly created user.</returns>
     /// <response code="200">User successfully registered.</response>
     /// <response code="400">Validation failed or user with this email already exists.</response>
@@ -46,20 +51,17 @@ public class AuthController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        var userId = await this._userService.RegisterUserAsync(
+        var token = await this._userService.RegisterUserAsync(
             registerUserDto,
             cancellationToken);
 
-        return Ok(new
-        {
-            UserId = userId
-        });
+        return Ok(token.MapToAuthResponseDto());
     }
 
     /// <summary>
     /// Authenticates a user and returns their unique identifier.
     /// </summary>
-    /// <param name="loginDto">The login credentials (email and password).</param>
+    /// <param name="loginUserDto">The login credentials (email and password).</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>Returns the unique identifier (GUID) of the authenticated user.</returns>
     /// <response code="200">User successfully authenticated.</response>
@@ -86,9 +88,6 @@ public class AuthController : ControllerBase
             loginUserDto,
             cancellationToken);
 
-        return Ok(new
-        {
-            Token = token
-        });
+        return Ok(token.MapToAuthResponseDto());
     }
 }
