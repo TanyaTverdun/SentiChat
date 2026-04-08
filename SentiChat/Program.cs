@@ -31,6 +31,7 @@ builder.Services.AddSwaggerDocumentation();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
+builder.Services.AddWebServices();
 
 var app = builder.Build();
 
