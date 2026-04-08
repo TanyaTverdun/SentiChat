@@ -36,7 +36,6 @@ public class ChatsController : ControllerBase
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A collection of chat summary data.</returns>
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<ChatListItemDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<IEnumerable<ChatListItemDto>>> GetChats(
         CancellationToken cancellationToken)
@@ -58,7 +57,6 @@ public class ChatsController : ControllerBase
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>The unique identifier of the chat.</returns>
     [HttpPost("personal")]
-    [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<PersonalChatCreatedResponseDto>> GetOrCreatePersonalChat(

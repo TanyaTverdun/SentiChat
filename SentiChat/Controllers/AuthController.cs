@@ -36,9 +36,8 @@ public class AuthController : ControllerBase
     /// <response code="200">User successfully registered.</response>
     /// <response code="400">Validation failed or user with this email already exists.</response>
     [HttpPost("register")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> RegisterAsync(
+    public async Task<ActionResult<AuthResponseDto>> RegisterAsync(
         [FromBody] RegisterUserDto registerUserDto,
         CancellationToken cancellationToken)
     {
@@ -67,11 +66,10 @@ public class AuthController : ControllerBase
     /// <response code="200">User successfully authenticated.</response>
     /// <response code="400">Validation failed (e.g., empty email or password).</response>
     /// <response code="401">Invalid email or password.</response>
-    [HttpPost("Login")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> LoginAsunc(
+    public async Task<ActionResult<AuthResponseDto>> LoginAsync(
         [FromBody] LoginUserDto loginUserDto, 
         CancellationToken cancellationToken)
     {

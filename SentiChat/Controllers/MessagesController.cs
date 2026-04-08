@@ -47,7 +47,7 @@ public class MessagesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> SendMessageAsync(
+    public async Task<ActionResult<MessageDto>> SendMessageAsync(
         [FromRoute] Guid chatId,
         [FromBody] SendMessageRequestDto request,
         CancellationToken cancellationToken)
@@ -90,11 +90,11 @@ public class MessagesController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<MessageDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetChatHistoryAsync(
+    public async Task<ActionResult<IEnumerable<MessageDto>>> GetChatHistoryAsync(
         [FromRoute] Guid chatId,
         [FromQuery] int pageSize = 50,
         [FromQuery] DateTime? before = null,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         var messages = await this._messageService.GetChatHistoryAsync(
             chatId,
