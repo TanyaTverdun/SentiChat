@@ -16,12 +16,13 @@ public interface IMessageService
     /// <param name="content">The text content of the message.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>
-    /// A <see cref="MessageDto"/> representing the saved message, including its ID, 
-    /// timestamp, and sentiment analysis results.
+    /// A tuple containing:
+    /// 1. A <see cref="MessageDto"/> representing the saved message with its sentiment.
+    /// 2. A collection of string identifiers representing the other chat members to notify.
     /// </returns>
     /// <exception cref="KeyNotFoundException">Thrown when the specified chat or sender does not exist.</exception>
     /// <exception cref="ArgumentException">Thrown when the message content is null or empty.</exception>
-    Task<MessageDto> SendMessageAsync(
+    Task<(MessageDto Message, IEnumerable<string> ReceiverIds)> SendMessageAsync(
         Guid chatId,
         Guid senderId,
         string content,

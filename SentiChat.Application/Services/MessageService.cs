@@ -26,10 +26,10 @@ public class MessageService : IMessageService
         this._unitOfWork = unitOfWork;
     }
 
-    public async Task<MessageDto> SendMessageAsync(
-        Guid chatId, 
-        Guid senderId, 
-        string content, 
+    public async Task<(MessageDto Message, IEnumerable<string> ReceiverIds)> SendMessageAsync(
+        Guid chatId,
+        Guid senderId,
+        string content,
         CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(content))
@@ -47,6 +47,11 @@ public class MessageService : IMessageService
         {
             throw new KeyNotFoundException($"Sender is not a member of this chat.");
         }
+
+        var receiverIds = chat.Members
+            .Where(m => m.UserId != senderId)
+            .Select(m => m.UserId.ToString())
+            .ToList();
 
         var sentiment = await this._sentimentAnalysisService
             .AnalyzeSentimentAsync(content);
@@ -68,7 +73,7 @@ public class MessageService : IMessageService
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return message.ToDto();
+        return (message.ToDto(), receiverIds);
     }
 
     public async Task<IEnumerable<MessageDto>> GetChatHistoryAsync(
