@@ -34,5 +34,12 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder
             .HasIndex(u => u.Email)
             .IsUnique();
+
+        builder.Property(u => u.IsOnline)
+            .HasDefaultValue(false)
+            .IsRequired();
+
+        builder.Property(u => u.LastSeen)
+            .IsRequired(false);
     }
 }
