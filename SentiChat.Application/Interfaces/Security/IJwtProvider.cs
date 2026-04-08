@@ -2,6 +2,9 @@
 
 namespace SentiChat.Application.Interfaces.Security;
 
+/// <summary>
+/// Defines a contract for authentication token generation.
+/// </summary>
 public interface IJwtProvider
 {
     /// <summary>

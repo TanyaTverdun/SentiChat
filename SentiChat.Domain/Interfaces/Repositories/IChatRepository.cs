@@ -2,6 +2,9 @@
 
 namespace SentiChat.Domain.Interfaces.Repositories;
 
+/// <summary>
+/// Defines a contract for data access operations related to chat entities.
+/// </summary>
 public interface IChatRepository : IBaseRepository<Chat>
 {
     /// <summary>
