@@ -1,0 +1,97 @@
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SentiChat.Application.DTOs.Messages;
+using SentiChat.Application.Interfaces;
+using SentiChat.Application.Interfaces.Security;
+
+namespace SentiChat.Controllers;
+
+/// <summary>
+/// Handles sending messages and retrieving chat history.
+/// </summary>
+[Authorize]
+[ApiController]
+[Route("api/chats/{chatId}/messages")]
+public class MessagesController : ControllerBase
+{
+    private readonly IMessageService _messageService;
+    private readonly ICurrentUserService _currentUserService;
+    private readonly IValidator<SendMessageRequestDto> _validator;
+
+    public MessagesController(
+        IMessageService messageService,
+        ICurrentUserService currentUserService,
+        IValidator<SendMessageRequestDto> validator)
+    {
+        this._messageService = messageService;
+        this._currentUserService = currentUserService;
+        this._validator = validator;
+    }
+
+    // <summary>
+    /// Sends a new message to a specific chat.
+    /// </summary>
+    /// <param name="chatId">The unique identifier of the chat.</param>
+    /// <param name="request">The message content.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>The created message with sentiment analysis results.</returns>
+    [HttpPost]
+    [ProducesResponseType(typeof(MessageDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> SendMessageAsync(
+        [FromRoute] Guid chatId,
+        [FromBody] SendMessageRequestDto request,
+        CancellationToken cancellationToken)
+    {
+        var validationResult = await this._validator.ValidateAsync(
+            request,
+            cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+
+        var senderId = this._currentUserService.GetUserId();
+
+        var message = await this._messageService.SendMessageAsync(
+            chatId,
+            senderId,
+            request.Content,
+            cancellationToken);
+
+        // TODO: SignalR integration
+
+        return Ok(message);
+    }
+
+    /// <summary>
+    /// Retrieves the message history for a specific chat.
+    /// </summary>
+    /// <param name="chatId">The unique identifier of the chat.</param>
+    /// <param name="pageSize">The number of messages to retrieve (default is 50).</param>
+    /// <param name="before">Optional timestamp to load older messages.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A list of messages for the chat.</returns>
+    [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<MessageDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetChatHistoryAsync(
+        [FromRoute] Guid chatId,
+        [FromQuery] int pageSize = 50,
+        [FromQuery] DateTime? before = null,
+        CancellationToken cancellationToken = default)
+    {
+        var messages = await this._messageService.GetChatHistoryAsync(
+            chatId,
+            pageSize,
+            before,
+            cancellationToken);
+
+        return Ok(messages);
+    }
+}
