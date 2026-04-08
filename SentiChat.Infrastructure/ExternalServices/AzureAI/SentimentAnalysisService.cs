@@ -12,7 +12,7 @@ public class SentimentAnalysisService : ISentimentAnalysisService
 
     public SentimentAnalysisService(IConfiguration configuration)
     {
-        var endpoint = configuration["Azure:LanguageService:Endopoint"];
+        var endpoint = configuration["Azure:LanguageService:Endpoint"];
         var apiKey = configuration["Azure:LanguageService:ApiKey"];
 
         if(string.IsNullOrEmpty(endpoint) || string.IsNullOrEmpty(apiKey))
