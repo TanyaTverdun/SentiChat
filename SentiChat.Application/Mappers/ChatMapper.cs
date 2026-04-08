@@ -18,4 +18,12 @@ public static partial class ChatMapper
         string initials,
         string? lastMessageText,
         DateTime? lastMessageTime);
+
+    public static PersonalChatCreatedResponseDto MapToCreatedResponseDto(this Guid chatId)
+    {
+        return new PersonalChatCreatedResponseDto 
+        { 
+            ChatId = chatId 
+        };
+    }
 }
