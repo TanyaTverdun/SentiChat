@@ -11,13 +11,16 @@ namespace SentiChat.Application.Services;
 public class ChatService : IChatService
 {
     private readonly IChatRepository _chatRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public ChatService(
         IChatRepository chatRepository,
+        IUserRepository userRepository,
         IUnitOfWork unitOfWork)
     {
         this._chatRepository = chatRepository;
+        this._userRepository = userRepository;
         this._unitOfWork = unitOfWork;
     }
 
@@ -66,14 +69,31 @@ public class ChatService : IChatService
     }
 
     public async Task<Guid> GetOrCreatePersonalChatAsync(
-        Guid user1Id,
-        Guid user2Id,
+        Guid currentUserId,
+        string userEmail,
         CancellationToken cancellationToken)
     {
+        var targetUser = await this._userRepository
+            .GetByEmailAsync(
+                userEmail,
+                cancellationToken);
+
+        if (targetUser == null)
+        {
+            throw new ArgumentException($"User with email '{userEmail}' does not exist.");
+        }
+
+        var targetUserId = targetUser.Id;
+
+        if (currentUserId == targetUserId)
+        {
+            throw new ArgumentException("You cannot create a personal chat with yourself.");
+        }
+
         var existingChat = await this._chatRepository
             .GetPersonalChatBetweenUsersAsync(
-                user1Id,
-                user2Id,
+                currentUserId,
+                targetUserId,
                 cancellationToken);
 
         if (existingChat != null)
@@ -81,7 +101,7 @@ public class ChatService : IChatService
             return existingChat.Id;
         }
 
-        var newChat = Chat.CreatePersonal(user1Id, user2Id);
+        var newChat = Chat.CreatePersonal(currentUserId, targetUserId);
 
         await this._chatRepository.AddAsync(
             newChat,
