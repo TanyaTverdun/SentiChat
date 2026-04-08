@@ -19,15 +19,15 @@ public class JwtProvider : IJwtProvider
 
     public string GenerateToken(User user)
     {
-        var secretKey = this._configuration["Jwt:SecretKey"];
+        var secretKey = this._configuration["JwtSettings:SecretKey"];
         if (string.IsNullOrEmpty(secretKey))
         {
             throw new InvalidOperationException("JWT Secret key is missing in configuration.");
         }
 
-        var issuer = this._configuration["Jwt:Issuer"];
-        var audience = this._configuration["Jwt:Audience"];
-        var expirationMinutes = int.Parse(this._configuration["Jwt:ExpirationMinutes"] ?? "60");
+        var issuer = this._configuration["JwtSettings:Issuer"];
+        var audience = this._configuration["JwtSettings:Audience"];
+        var expirationMinutes = int.Parse(this._configuration["JwtSettings:ExpiryMinutes"] ?? "60");
 
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
