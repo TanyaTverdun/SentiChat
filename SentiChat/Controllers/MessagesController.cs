@@ -1,9 +1,12 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using SentiChat.Application.DTOs.Messages;
 using SentiChat.Application.Interfaces;
 using SentiChat.Application.Interfaces.Security;
+using SentiChat.Application.Constants;
+using SentiChat.Hubs;
 
 namespace SentiChat.Controllers;
 
@@ -18,19 +21,22 @@ public class MessagesController : ControllerBase
     private readonly IMessageService _messageService;
     private readonly ICurrentUserService _currentUserService;
     private readonly IValidator<SendMessageRequestDto> _validator;
+    private readonly IHubContext<ChatHub> _hubContext;
 
     public MessagesController(
         IMessageService messageService,
         ICurrentUserService currentUserService,
-        IValidator<SendMessageRequestDto> validator)
+        IValidator<SendMessageRequestDto> validator,
+        IHubContext<ChatHub> hubContext)
     {
         this._messageService = messageService;
         this._currentUserService = currentUserService;
         this._validator = validator;
+        this._hubContext = hubContext;
     }
 
-    // <summary>
-    /// Sends a new message to a specific chat.
+    /// <summary>
+    /// Sends a new message, triggers sentiment analysis, and broadcasts it in real-time to other chat members.
     /// </summary>
     /// <param name="chatId">The unique identifier of the chat.</param>
     /// <param name="request">The message content.</param>
@@ -41,7 +47,7 @@ public class MessagesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> SendMessageAsync(
+    public async Task<IActionResult> SendMessageAsync(
         [FromRoute] Guid chatId,
         [FromBody] SendMessageRequestDto request,
         CancellationToken cancellationToken)
@@ -57,13 +63,17 @@ public class MessagesController : ControllerBase
 
         var senderId = this._currentUserService.GetUserId();
 
-        var message = await this._messageService.SendMessageAsync(
+        var (message, receiverIds) = await _messageService.SendMessageAsync(
             chatId,
             senderId,
             request.Content,
             cancellationToken);
 
-        // TODO: SignalR integration
+        if (receiverIds.Any())
+        {
+            await _hubContext.Clients.Users(receiverIds)
+                .SendAsync(SignalRConstants.ReceiveMessage, message, cancellationToken);
+        }
 
         return Ok(message);
     }
