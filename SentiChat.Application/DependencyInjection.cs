@@ -12,6 +12,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IChatService, ChatService>();
+        services.AddScoped<IMessageService, MessageService>();
 
         services.AddValidatorsFromAssemblyContaining<RegisterUserDtoValidator>();
 
