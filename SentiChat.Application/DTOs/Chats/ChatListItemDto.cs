@@ -29,4 +29,14 @@ public record ChatListItemDto
     /// The timestamp of the last message.
     /// </summary>
     public DateTime? LastMessageTime { get; set; }
+
+    /// <summary>
+    /// The unique identifier of the other participant in the chat.
+    /// </summary>
+    public Guid PartnerId { get; set; }
+
+    /// <summary>
+    /// Indicates whether the chat partner is currently online.
+    /// </summary>
+    public bool IsOnline { get; set; }
 }

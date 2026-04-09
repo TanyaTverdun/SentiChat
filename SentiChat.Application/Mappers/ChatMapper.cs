@@ -32,6 +32,12 @@ public static partial class ChatMapper
     /// <param name="lastMessageTime">
     /// The timestamp of the most recent message, if any.
     /// </param>
+    /// <param name="partnerId">
+    /// The unique identifier of the other participant (for personal chats).
+    /// </param>
+    /// <param name="isOnline">
+    /// The current online status of the partner.
+    /// </param>
     /// <returns>
     /// A fully populated <see cref="ChatListItemDto"/>.
     /// </returns>
@@ -45,7 +51,9 @@ public static partial class ChatMapper
         string name,
         string initials,
         string? lastMessageText,
-        DateTime? lastMessageTime);
+        DateTime? lastMessageTime,
+        Guid partnerId,
+        bool isOnline);
 
     /// <summary>
     /// Wraps a newly generated Chat ID into a standard response DTO.

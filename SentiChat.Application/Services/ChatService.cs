@@ -42,6 +42,8 @@ public class ChatService : IChatService
         foreach (var chat in chats)
         {
             string displayTitle = chat.Title ?? ChatConstants.DefaultChatName;
+            Guid partnerId = Guid.Empty;
+            bool isOnline = false;
 
             if (!chat.IsGroup)
             {
@@ -51,6 +53,8 @@ public class ChatService : IChatService
                 if (otherMember != null)
                 {
                     displayTitle = otherMember.User.Name;
+                    partnerId = otherMember.UserId;
+                    isOnline = otherMember.User.IsOnline;
                 }
             }
 
@@ -62,7 +66,9 @@ public class ChatService : IChatService
                 displayTitle,
                 displayTitle.ToInitials(),
                 lastMessage?.Text,
-                lastMessage?.CreatedAt);
+                lastMessage?.CreatedAt,
+                partnerId,
+                isOnline);
 
             chatList.Add(dto);
         }
