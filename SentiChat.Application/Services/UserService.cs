@@ -6,6 +6,9 @@ using SentiChat.Domain.Interfaces.Repositories;
 
 namespace SentiChat.Application.Services;
 
+/// <summary>
+/// Provides the standard implementation of <see cref="IUserService"/>.
+/// </summary>
 public class UserService : IUserService
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -25,6 +28,7 @@ public class UserService : IUserService
         this._jwtProvider = jwtProvider;
     }
 
+    /// <inheritdoc />
     public async Task<string> RegisterUserAsync(
         RegisterUserDto registerUser,
         CancellationToken cancellationToken)
@@ -61,6 +65,7 @@ public class UserService : IUserService
         return token;
     }
 
+    /// <inheritdoc />
     public async Task<string> LoginUserAsync(
         LoginUserDto loginUserDto, 
         CancellationToken cancellationToken)

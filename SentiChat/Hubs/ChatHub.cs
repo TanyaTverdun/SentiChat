@@ -14,7 +14,9 @@ public class ChatHub : Hub
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public ChatHub(IUserRepository userRepository, IUnitOfWork unitOfWork)
+    public ChatHub(
+        IUserRepository userRepository, 
+        IUnitOfWork unitOfWork)
     {
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
@@ -31,7 +33,8 @@ public class ChatHub : Hub
         if (user != null)
         {
             user.IsOnline = true;
-            await _unitOfWork.SaveChangesAsync(Context.ConnectionAborted);
+            await _unitOfWork
+                .SaveChangesAsync(Context.ConnectionAborted);
         }
 
         await Clients.All.SendAsync(
@@ -55,7 +58,8 @@ public class ChatHub : Hub
         {
             user.IsOnline = false;
             user.LastSeen = now;
-            await _unitOfWork.SaveChangesAsync(Context.ConnectionAborted);
+            await _unitOfWork
+                .SaveChangesAsync(Context.ConnectionAborted);
         }
 
         await Clients.All.SendAsync(

@@ -7,6 +7,9 @@ using SentiChat.Domain.Interfaces.Repositories;
 
 namespace SentiChat.Application.Services;
 
+/// <summary>
+/// Provides the standard implementation of <see cref="IMessageService"/>.
+/// </summary>
 public class MessageService : IMessageService
 {
     private readonly IMessageRepository _messageRepository;
@@ -26,6 +29,7 @@ public class MessageService : IMessageService
         this._unitOfWork = unitOfWork;
     }
 
+    /// <inheritdoc />
     public async Task<(MessageDto Message, IEnumerable<string> ReceiverIds)> SendMessageAsync(
         Guid chatId,
         Guid senderId,
@@ -76,6 +80,7 @@ public class MessageService : IMessageService
         return (message.ToDto(), receiverIds);
     }
 
+    /// <inheritdoc />
     public async Task<IEnumerable<MessageDto>> GetChatHistoryAsync(
         Guid chatId,
         int pageSize,

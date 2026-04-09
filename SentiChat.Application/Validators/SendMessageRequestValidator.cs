@@ -3,8 +3,15 @@ using SentiChat.Application.DTOs.Messages;
 
 namespace SentiChat.Application.Validators;
 
-public class SendMessageRequestValidator : AbstractValidator<SendMessageRequestDto>
+/// <summary>
+/// Validates the request data for sending a new message in a chat.
+/// </summary>
+public class SendMessageRequestValidator 
+    : AbstractValidator<SendMessageRequestDto>
 {
+    /// <summary>
+    /// Validates the request data for sending a new message in a chat.
+    /// </summary>
     public SendMessageRequestValidator()
     {
         RuleFor(x => x.Content)

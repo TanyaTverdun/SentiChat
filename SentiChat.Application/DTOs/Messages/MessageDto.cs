@@ -1,7 +1,8 @@
 ﻿namespace SentiChat.Application.DTOs.Messages;
 
 /// <summary>
-/// Represents a single message within a chat, including its content and sentiment analysis results.
+/// Represents a single message within a chat, 
+/// including its content and sentiment analysis results.
 /// </summary>
 public record MessageDto
 {
@@ -27,7 +28,8 @@ public record MessageDto
     public DateTime SentAt { get; init; }
 
     /// <summary>
-    /// The sentiment of the message (e.g., "Positive", "Negative", "Neutral", "Mixed"). 
+    /// The sentiment of the message 
+    /// (e.g., "Positive", "Negative", "Neutral", "Mixed"). 
     /// Used by the UI to apply specific styling or icons.
     /// </summary>
     public string Sentiment { get; init; } = "Neutral";

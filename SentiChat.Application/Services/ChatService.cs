@@ -8,6 +8,9 @@ using SentiChat.Domain.Entities;
 
 namespace SentiChat.Application.Services;
 
+/// <summary>
+/// Provides the standard implementation of <see cref="IChatService"/>.
+/// </summary>
 public class ChatService : IChatService
 {
     private readonly IChatRepository _chatRepository;
@@ -24,6 +27,7 @@ public class ChatService : IChatService
         this._unitOfWork = unitOfWork;
     }
 
+    /// <inheritdoc />
     public async Task<IEnumerable<ChatListItemDto>> GetUserChatsAsync(
         Guid userId,
         CancellationToken cancellationToken)
@@ -68,6 +72,7 @@ public class ChatService : IChatService
             .ToList();
     }
 
+    /// <inheritdoc />
     public async Task<Guid> GetOrCreatePersonalChatAsync(
         Guid currentUserId,
         string userEmail,

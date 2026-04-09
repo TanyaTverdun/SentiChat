@@ -8,12 +8,16 @@ namespace SentiChat.Application.Extensions;
 public static class StringExtensions
 {
     /// <summary>
-    /// Generates up to two uppercase initials from a given string (e.g., a user's full name).
+    /// Generates up to two uppercase initials 
+    /// from a given string (e.g., a user's full name).
     /// </summary>
-    /// <param name="name">The input string to generate initials from.</param>
+    /// <param name="name">
+    /// The input string to generate initials from.
+    /// </param>
     /// <returns>
     /// A string containing the initials. If the input is null or empty, 
-    /// returns the default initials defined in <see cref="ChatConstants.DefaultInitials"/>.
+    /// returns the default initials defined 
+    /// in <see cref="ChatConstants.DefaultInitials"/>.
     /// </returns>
     public static string ToInitials(this string name)
     {
@@ -22,7 +26,9 @@ public static class StringExtensions
             return ChatConstants.DefaultInitials;
         }
 
-        var parts = name.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        var parts = name.Trim().Split(
+            ' ', 
+            StringSplitOptions.RemoveEmptyEntries);
 
         if (parts.Length == 1)
         {

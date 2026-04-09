@@ -5,7 +5,8 @@ using System.Security.Claims;
 namespace SentiChat.Security;
 
 /// <summary>
-/// Provides access to the current authenticated user's information from the HTTP context.
+/// Provides access to the current authenticated 
+/// user's information from the HTTP context.
 /// </summary>
 public class CurrentUserService : ICurrentUserService
 {
@@ -19,9 +20,12 @@ public class CurrentUserService : ICurrentUserService
     /// <summary>
     /// Retrieves the unique identifier of the currently authenticated user.
     /// </summary>
-    /// <returns>The user's unique identifier (GUID).</returns>
+    /// <returns>
+    /// The user's unique identifier (GUID).
+    /// </returns>
     /// <exception cref="UnauthorizedAccessException">
-    /// Thrown when the user is not authenticated or the ID claim is missing/invalid.
+    /// Thrown when the user is not authenticated 
+    /// or the ID claim is missing/invalid.
     /// </exception>
     public Guid GetUserId()
     {
@@ -35,6 +39,7 @@ public class CurrentUserService : ICurrentUserService
             return userId;
         }
 
-        throw new UnauthorizedAccessException("User is not authenticated or ID claim is missing.");
+        throw new UnauthorizedAccessException(
+            "User is not authenticated or ID claim is missing.");
     }
 }

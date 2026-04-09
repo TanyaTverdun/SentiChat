@@ -4,15 +4,21 @@ using System.Reflection;
 namespace SentiChat.Extensions;
 
 /// <summary>
-/// Provides extension methods for configuring Swagger OpenAPI documentation.
+/// Provides extension methods for configuring 
+/// Swagger OpenAPI documentation.
 /// </summary>
 public static class SwaggerServiceExtensions
 {
     /// <summary>
-    /// Adds and configures Swagger documentation, including XML comments and JWT authentication UI.
+    /// Adds and configures Swagger documentation, 
+    /// including XML comments and JWT authentication UI.
     /// </summary>
-    /// <param name="services">The IServiceCollection to add services to.</param>
-    /// <returns>The modified IServiceCollection for chaining.</returns>
+    /// <param name="services">
+    /// The IServiceCollection to add services to.
+    /// </param>
+    /// <returns>
+    /// The modified IServiceCollection for chaining.
+    /// </returns>
     public static IServiceCollection AddSwaggerDocumentation(
         this IServiceCollection services)
     {
@@ -22,7 +28,8 @@ public static class SwaggerServiceExtensions
             {
                 Title = "SentiChat Api",
                 Version = "v1",
-                Description = "A chat API with automatic sentiment analysis of messages via Azure AI Language.",
+                Description = "A chat API with automatic sentiment analysis " +
+                    "of messages via Azure AI Language.",
                 Contact = new OpenApiContact
                 {
                     Name = "Tanya Tverdun",
@@ -38,12 +45,17 @@ public static class SwaggerServiceExtensions
                 c.IncludeXmlComments(appXmlPath);
             }
 
-            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlFilename = $"{Assembly
+                .GetExecutingAssembly()
+                .GetName()
+                .Name}.xml";
+
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
             c.IncludeXmlComments(xmlPath);
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                Description = "JWT Authorization header using the Bearer scheme. " +
+                    "Example: \"Authorization: Bearer {token}\"",
                 Name = "Authorization",
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.ApiKey,

@@ -3,8 +3,14 @@ using SentiChat.Application.DTOs.Users;
 
 namespace SentiChat.Application.Validators;
 
+/// <summary>
+/// Validates the request data for registering a new user.
+/// </summary>
 public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
 {
+    /// <summary>
+    /// Validates the request data for registering a new user.
+    /// </summary>
     public RegisterUserDtoValidator()
     {
         RuleFor(x => x.Name)

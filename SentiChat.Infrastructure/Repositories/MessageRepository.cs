@@ -5,6 +5,10 @@ using SentiChat.Infrastructure.Data;
 
 namespace SentiChat.Infrastructure.Repositories;
 
+/// <summary>
+/// Provides the standard implementation of <see cref="IMessageRepository"/>, 
+/// inheriting common database operations from <see cref="BaseRepository{Message}"/>.
+/// </summary>
 public class MessageRepository : BaseRepository<Message>, IMessageRepository
 {
     public MessageRepository(SentiChatDbContext context) 
@@ -12,6 +16,7 @@ public class MessageRepository : BaseRepository<Message>, IMessageRepository
     {
     }
 
+    /// <inheritdoc />
     public async Task<IEnumerable<Message>> GetMessagesAsync(
         Guid chatId, 
         int pageSize, 

@@ -1,36 +1,41 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SentiChat.Application.Interfaces.Security;
 using SentiChat.Domain.Entities;
+using SentiChat.Infrastructure.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
 namespace SentiChat.Infrastructure.Security;
 
+/// <summary>
+/// Provides the standard implementation of <see cref="IJwtProvider"/>
+/// </summary>
 public class JwtProvider : IJwtProvider
 {
-    private readonly IConfiguration _configuration;
+    private readonly JwtOptions _options;
 
-    public JwtProvider(IConfiguration configuration)
+    public JwtProvider(IOptions<JwtOptions> options)
     {
-        this._configuration = configuration;
+        this._options = options.Value;
     }
 
+    /// <inheritdoc />
     public string GenerateToken(User user)
     {
-        var secretKey = this._configuration["JwtSettings:SecretKey"];
-        if (string.IsNullOrEmpty(secretKey))
+        if (string.IsNullOrEmpty(this._options.SecretKey))
         {
-            throw new InvalidOperationException("JWT Secret key is missing in configuration.");
+            throw new InvalidOperationException(
+                "JWT Secret key is missing in configuration.");
         }
 
-        var issuer = this._configuration["JwtSettings:Issuer"];
-        var audience = this._configuration["JwtSettings:Audience"];
-        var expirationMinutes = int.Parse(this._configuration["JwtSettings:ExpiryMinutes"] ?? "60");
-
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+        var securityKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(this._options.SecretKey));
+        var credentials = new SigningCredentials(
+            securityKey, 
+            SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
         {
@@ -40,10 +45,11 @@ public class JwtProvider : IJwtProvider
         };
 
         var token = new JwtSecurityToken(
-            issuer: issuer,
-            audience: audience,
+            issuer: this._options.Issuer,
+            audience: this._options.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(expirationMinutes),
+            expires: DateTime.UtcNow
+                .AddMinutes(this._options.ExpiryMinutes),
             signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

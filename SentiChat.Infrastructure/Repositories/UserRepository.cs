@@ -5,6 +5,10 @@ using SentiChat.Infrastructure.Data;
 
 namespace SentiChat.Infrastructure.Repositories;
 
+/// <summary>
+/// Provides the standard implementation of <see cref="IUserRepository"/>, 
+/// inheriting common database operations from <see cref="BaseRepository{User}"/>.
+/// </summary>
 public class UserRepository : BaseRepository<User>, IUserRepository
 {
     public UserRepository(SentiChatDbContext dbContext) 
@@ -12,6 +16,7 @@ public class UserRepository : BaseRepository<User>, IUserRepository
     {
     }
 
+    /// <inheritdoc />
     public async Task<bool> ExistsByEmailAsync(
         string email, 
         CancellationToken cancellationToken)
@@ -22,6 +27,7 @@ public class UserRepository : BaseRepository<User>, IUserRepository
                 cancellationToken);
     }
 
+    /// <inheritdoc />
     public async Task<User?> GetByEmailAsync(
         string email,
         CancellationToken cancellationToken)
@@ -32,6 +38,7 @@ public class UserRepository : BaseRepository<User>, IUserRepository
                 cancellationToken);
     }
 
+    /// <inheritdoc />
     public async Task<User?> GetByIdAsync(
         Guid id, 
         CancellationToken cancellationToken)

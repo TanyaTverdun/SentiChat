@@ -9,5 +9,7 @@ public interface IBaseRepository<T> where T : class
     /// <summary>
     /// Adds a new entity to the data store.
     /// </summary>
-    Task AddAsync(T entity, CancellationToken cancellationToken);
+    Task AddAsync(
+        T entity, 
+        CancellationToken cancellationToken);
 }

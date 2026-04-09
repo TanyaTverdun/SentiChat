@@ -5,6 +5,10 @@ using SentiChat.Infrastructure.Data;
 
 namespace SentiChat.Infrastructure.Repositories;
 
+/// <summary>
+/// Provides the standard implementation of <see cref="IChatRepository"/>, 
+/// inheriting common database operations from <see cref="BaseRepository{Chat}"/>.
+/// </summary>
 public class ChatRepository : BaseRepository<Chat>, IChatRepository
 {
     public ChatRepository(SentiChatDbContext dbContext)
@@ -12,6 +16,7 @@ public class ChatRepository : BaseRepository<Chat>, IChatRepository
     {
     }
 
+    /// <inheritdoc />
     public async Task<IEnumerable<Chat>> GetUserChatsAsync(
         Guid userId, 
         CancellationToken cancellationToken)
@@ -24,6 +29,7 @@ public class ChatRepository : BaseRepository<Chat>, IChatRepository
             .ToListAsync(cancellationToken);
     }
 
+    /// <inheritdoc />
     public async Task<Chat?> GetPersonalChatBetweenUsersAsync(
         Guid user1Id, 
         Guid user2Id, 
@@ -37,6 +43,7 @@ public class ChatRepository : BaseRepository<Chat>, IChatRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
+    /// <inheritdoc />
     public async Task<Chat?> GetChatByIdAsync(
         Guid chatId,
         CancellationToken cancellationToken)

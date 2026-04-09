@@ -3,6 +3,9 @@ using SentiChat.Domain.Interfaces.Repositories;
 
 namespace SentiChat.Infrastructure.Repositories;
 
+/// <summary>
+/// Provides the standard implementation of <see cref="IBaseRepository"/>.
+/// </summary>
 public class BaseRepository<T> : IBaseRepository<T> where T : class
 {
     protected readonly DbContext _dbContext;
@@ -14,8 +17,14 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         this._dbSet = _dbContext.Set<T>();
     }
 
-    public async Task AddAsync(T entity, CancellationToken cancellationToken)
+    /// <inheritdoc />
+    public async Task AddAsync(
+        T entity, 
+        CancellationToken cancellationToken)
     {
-        await this._dbSet.AddAsync(entity, cancellationToken);
+        await this._dbSet
+            .AddAsync(
+                entity, 
+                cancellationToken);
     }
 }

@@ -9,7 +9,8 @@ using SentiChat.Application.Mappers;
 namespace SentiChat.Controllers;
 
 /// <summary>
-/// Manages user chats, including creating personal chats and retrieving chat history.
+/// Manages user chats, including creating personal 
+/// chats and retrieving chat history.
 /// </summary>
 [Authorize]
 [ApiController]
@@ -33,10 +34,25 @@ public class ChatsController : ControllerBase
     /// <summary>
     /// Retrieves a list of chats for the currently authenticated user.
     /// </summary>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>A collection of chat summary data.</returns>
+    /// <param name="cancellationToken">
+    /// A token to monitor for cancellation requests.
+    /// </param>
+    /// <returns>
+    /// A collection of chat summary data.
+    /// </returns>
+    /// <response code="200">
+    /// Successfully retrieved the list of chats.
+    /// </response>
+    /// <response code="401">
+    /// User is not authenticated.
+    /// </response>
+    /// <response code="500">
+    /// An unexpected server error occurred.
+    /// </response>
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<ChatListItemDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<IEnumerable<ChatListItemDto>>> GetChats(
         CancellationToken cancellationToken)
     {
@@ -51,17 +67,40 @@ public class ChatsController : ControllerBase
     }
 
     /// <summary>
-    /// Retrieves an existing personal chat or creates a new one with the specified target user.
+    /// Retrieves an existing personal chat or creates 
+    /// a new one with the specified target user.
     /// </summary>
-    /// <param name="request">The data containing the target user's ID.</param>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>The unique identifier of the chat.</returns>
+    /// <param name="request">
+    /// The data containing the target user's ID.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// A token to monitor for cancellation requests.
+    /// </param>
+    /// <returns>
+    /// The unique identifier of the chat.
+    /// </returns>
+    /// <response code="200">
+    /// Successfully retrieved or created the personal chat.
+    /// </response>
+    /// <response code="400">
+    /// Validation failed (e.g., invalid email format).
+    /// </response>
+    /// <response code="401">
+    /// User is not authenticated.
+    /// </response>
+    /// <response code="500">
+    /// An unexpected server error occurred.
+    /// </response>
     [HttpPost("personal")]
+    [ProducesResponseType(
+        typeof(PersonalChatCreatedResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<PersonalChatCreatedResponseDto>> GetOrCreatePersonalChat(
-        [FromBody] CreatePersonalChatRequestDto request,
-        CancellationToken cancellationToken)
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<PersonalChatCreatedResponseDto>> 
+        GetOrCreatePersonalChat(
+            [FromBody] CreatePersonalChatRequestDto request,
+            CancellationToken cancellationToken)
     {
         var validationResult = await this._createChatValidator.ValidateAsync(
             request,

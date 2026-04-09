@@ -1,7 +1,8 @@
 ﻿namespace SentiChat.Application.DTOs.Messages;
 
 /// <summary>
-/// Represents the full details of a chat, including participant information and message history.
+/// Represents the full details of a chat, including 
+/// participant information and message history.
 /// </summary>
 public record ChatDetailsDto
 {
@@ -17,12 +18,15 @@ public record ChatDetailsDto
     public string ChatName { get; init; } = string.Empty;
 
     /// <summary>
-    /// Initials of the target user (e.g., "IM"). Used for the avatar placeholder.
+    /// Initials of the target user (e.g., "IM"). 
+    /// Used for the avatar placeholder.
     /// </summary>
     public string TargetUserInitials { get; init; } = string.Empty;
 
     /// <summary>
-    /// The collection of messages in this chat, typically ordered chronologically.
+    /// The collection of messages in this chat, 
+    /// typically ordered chronologically.
     /// </summary>
-    public IEnumerable<MessageDto> Messages { get; init; } = new List<MessageDto>();
+    public IEnumerable<MessageDto> Messages { get; init; } 
+        = new List<MessageDto>();
 }

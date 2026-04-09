@@ -3,8 +3,14 @@ using SentiChat.Application.DTOs.Users;
 
 namespace SentiChat.Application.Validators;
 
+/// <summary>
+/// Validates the request data for user login.
+/// </summary>
 public class LoginUserDtoValidator : AbstractValidator<LoginUserDto>
 {
+    /// <summary>
+    /// Validates the request data for user login.
+    /// </summary>
     public LoginUserDtoValidator()
     {
         RuleFor(x => x.Email)

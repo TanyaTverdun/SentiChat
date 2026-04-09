@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using SentiChat.Application.Constants;
+using SentiChat.Infrastructure.Configuration;
 using System.Text;
 
 namespace SentiChat.Extensions;
@@ -10,22 +12,34 @@ namespace SentiChat.Extensions;
 public static class AuthenticationExtensions
 {
     /// <summary>
-    /// Configures JWT Bearer authentication for the API using settings from the configuration.
+    /// Configures JWT Bearer authentication for the 
+    /// API using settings from the configuration.
     /// </summary>
-    /// <param name="services">The IServiceCollection to add services to.</param>
-    /// <param name="configuration">The application configuration containing JWT settings.</param>
-    /// <returns>The modified IServiceCollection for chaining.</returns>
+    /// <param name="services">
+    /// The IServiceCollection to add services to.
+    /// </param>
+    /// <param name="configuration">
+    /// The application configuration containing JWT settings.
+    /// </param>
+    /// <returns>
+    /// The modified IServiceCollection for chaining.
+    /// </returns>
     /// <exception cref="InvalidOperationException">
-    /// Thrown when the 'JwtSettings:SecretKey' is missing or empty in the configuration.
+    /// Thrown when the 'JwtSettings:SecretKey' is missing 
+    /// or empty in the configuration.
     /// </exception>
     public static IServiceCollection AddApiAuthentication(
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var secretKey = configuration["JwtSettings:SecretKey"];
-        if (string.IsNullOrEmpty(secretKey))
+        var jwtOptions = configuration
+                .GetSection(JwtOptions.SectionName)
+                .Get<JwtOptions>();
+
+        if (jwtOptions == null || string.IsNullOrEmpty(jwtOptions.SecretKey))
         {
-            throw new InvalidOperationException("JWT Secret key is missing in configuration.");
+            throw new InvalidOperationException(
+                "JWT Settings are missing or invalid in configuration.");
         }
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -37,10 +51,29 @@ public static class AuthenticationExtensions
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration["JwtSettings:Issuer"],
-                    ValidAudience = configuration["JwtSettings:Audience"],
+                    ValidIssuer = jwtOptions.Issuer,
+                    ValidAudience = jwtOptions.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(secretKey))
+                        Encoding.UTF8.GetBytes(jwtOptions.SecretKey))
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context
+                            .Request
+                            .Query[SignalRConstants.AccessTokenQueryParam];
+                        var path = context.HttpContext.Request.Path;
+
+                        if (!string.IsNullOrEmpty(accessToken) 
+                                && path.StartsWithSegments(
+                                        SignalRConstants.HubBasePath))
+                        {
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
                 };
             });
 

@@ -30,13 +30,28 @@ public class AuthController : ControllerBase
     /// <summary>
     /// Registers a new user in the system.
     /// </summary>
-    /// <param name="registerUserDto">User registration details including email and password.</param>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>Returns the unique identifier (GUID) of the newly created user.</returns>
-    /// <response code="200">User successfully registered.</response>
-    /// <response code="400">Validation failed or user with this email already exists.</response>
+    /// <param name="registerUserDto">
+    /// User registration details including email and password.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// A token to monitor for cancellation requests.
+    /// </param>
+    /// <returns>
+    /// Returns an authentication response containing the JWT token.
+    /// </returns>
+    /// <response code="200">
+    /// User successfully registered.
+    /// </response>
+    /// <response code="400">
+    /// Validation failed or user with this email already exists.
+    /// </response>
+    /// <response code="500">
+    /// An unexpected server error occurred.
+    /// </response>
     [HttpPost("register")]
+    [ProducesResponseType(typeof(AuthResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<AuthResponseDto>> RegisterAsync(
         [FromBody] RegisterUserDto registerUserDto,
         CancellationToken cancellationToken)
@@ -60,15 +75,32 @@ public class AuthController : ControllerBase
     /// <summary>
     /// Authenticates a user and returns their unique identifier.
     /// </summary>
-    /// <param name="loginUserDto">The login credentials (email and password).</param>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>Returns the unique identifier (GUID) of the authenticated user.</returns>
-    /// <response code="200">User successfully authenticated.</response>
-    /// <response code="400">Validation failed (e.g., empty email or password).</response>
-    /// <response code="401">Invalid email or password.</response>
+    /// <param name="loginUserDto">
+    /// The login credentials (email and password).
+    /// </param>
+    /// <param name="cancellationToken">
+    /// A token to monitor for cancellation requests.
+    /// </param>
+    /// <returns>
+    /// Returns an authentication response containing the JWT token.
+    /// </returns>
+    /// <response code="200">
+    /// User successfully authenticated.
+    /// </response>
+    /// <response code="400">
+    /// Validation failed (e.g., empty email or password).
+    /// </response>
+    /// <response code="401">
+    /// Invalid email or password.
+    /// </response>
+    /// <response code="500">
+    /// An unexpected server error occurred.
+    /// </response>
     [HttpPost("login")]
+    [ProducesResponseType(typeof(AuthResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<AuthResponseDto>> LoginAsync(
         [FromBody] LoginUserDto loginUserDto, 
         CancellationToken cancellationToken)

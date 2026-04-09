@@ -10,8 +10,12 @@ namespace SentiChat.Application.Interfaces.AzureAI
         /// <summary>
         /// Analyzes the sentiment of the provided text.
         /// </summary>
-        /// <param name="text">The message content to analyze.</param>
-        /// <returns>The detected sentiment type (Positive, Negative, Neutral, or Mixed).</returns>
+        /// <param name="text">
+        /// The message content to analyze.
+        /// </param>
+        /// <returns>
+        /// The detected sentiment type (Positive, Negative, Neutral, or Mixed).
+        /// </returns>
         Task<SentimentType> AnalyzeSentimentAsync(string text);
     }
 }

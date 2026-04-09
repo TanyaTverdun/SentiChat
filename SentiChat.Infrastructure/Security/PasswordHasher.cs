@@ -2,15 +2,24 @@
 
 namespace SentiChat.Infrastructure.Security;
 
+/// <summary>
+/// Provides the standard implementation of <see cref="IPasswordHasher"/>
+/// </summary>
 public class PasswordHasher : IPasswordHasher
 {
+    /// <inheritdoc />
     public string HashPassword(string password)
     {
         return BCrypt.Net.BCrypt.HashPassword(password);
     }
 
-    public bool VerifyPassword(string hashedPassword, string providedPassword)
+    /// <inheritdoc />
+    public bool VerifyPassword(
+        string hashedPassword, 
+        string providedPassword)
     {
-        return BCrypt.Net.BCrypt.Verify(providedPassword, hashedPassword);
+        return BCrypt.Net.BCrypt.Verify(
+            providedPassword, 
+            hashedPassword);
     }
 }

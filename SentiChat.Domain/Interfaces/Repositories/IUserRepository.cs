@@ -30,9 +30,15 @@ public interface IUserRepository : IBaseRepository<User>
     /// <summary>
     /// Retrieves a specific user by their unique identifier.
     /// </summary>
-    /// <param name="id">The unique identifier (GUID) of the user to retrieve.</param>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>The user entity if found; otherwise, null.</returns>
+    /// <param name="id">
+    /// The unique identifier (GUID) of the user to retrieve.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// A token to monitor for cancellation requests.
+    /// </param>
+    /// <returns>
+    /// The user entity if found; otherwise, null.
+    /// </returns>
     Task<User?> GetByIdAsync(
         Guid id, 
         CancellationToken cancellationToken);

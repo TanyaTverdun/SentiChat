@@ -5,7 +5,7 @@ namespace SentiChat.Infrastructure.Data;
 
 public class SentiChatDbContext : DbContext
 {
-    public SentiChatDbContext(DbContextOptions<SentiChatDbContext> options) 
+    public SentiChatDbContext(DbContextOptions<SentiChatDbContext> options)
         : base(options)
     {
     }
@@ -19,7 +19,8 @@ public class SentiChatDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(SentiChatDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(
+            typeof(SentiChatDbContext).Assembly);
     }
 
 }

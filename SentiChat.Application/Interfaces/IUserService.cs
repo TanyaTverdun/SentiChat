@@ -10,18 +10,39 @@ public interface IUserService
     /// <summary>
     /// Registers a new user in the system.
     /// </summary>
-    /// <param name="registerUser">The data transfer object containing user registration details.</param>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>The JWT token as a string.</returns>
-    /// <exception cref="ArgumentException">Thrown when a user with the provided email already exists.</exception>
-    public Task<string> RegisterUserAsync(RegisterUserDto registerUser, CancellationToken cancellationToken);
+    /// <param name="registerUser">
+    /// The data transfer object containing user registration details.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// A token to monitor for cancellation requests.
+    /// </param>
+    /// <returns>
+    /// The JWT token as a string.
+    /// </returns>
+    /// <exception cref="ArgumentException">
+    /// Thrown when a user with the provided email already exists.
+    /// </exception>
+    public Task<string> RegisterUserAsync(
+        RegisterUserDto registerUser, 
+        CancellationToken cancellationToken);
 
     /// <summary>
     /// Authenticates a user based on the provided credentials.
     /// </summary>
-    /// <param name="loginDto">The data transfer object containing login credentials (email and password).</param>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>The JWT token as a string.</returns>
-    /// <exception cref="UnauthorizedAccessException">Thrown when the email is not found or the password does not match.</exception>
-    public Task<string> LoginUserAsync(LoginUserDto loginUserDto, CancellationToken cancellationToken);
+    /// <param name="loginUserDto">
+    /// The data transfer object containing login credentials 
+    /// (email and password).
+    /// </param>
+    /// <param name="cancellationToken">
+    /// A token to monitor for cancellation requests.
+    /// </param>
+    /// <returns>
+    /// The JWT token as a string.
+    /// </returns>
+    /// <exception cref="UnauthorizedAccessException">
+    /// Thrown when the email is not found or the password does not match.
+    /// </exception>
+    public Task<string> LoginUserAsync(
+        LoginUserDto loginUserDto, 
+        CancellationToken cancellationToken);
 }
