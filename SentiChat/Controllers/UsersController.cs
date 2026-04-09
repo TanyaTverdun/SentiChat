@@ -47,7 +47,7 @@ public class UsersController : ControllerBase
     /// <response code="500">
     /// An unexpected server error occurred.
     /// </response>
-    [HttpGet("me")]
+    [HttpGet("profile")]
     [ProducesResponseType(typeof(UserProfileDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -88,7 +88,7 @@ public class UsersController : ControllerBase
     /// <response code="500">
     /// An unexpected server error occurred.
     /// </response>
-    [HttpPut("me")]
+    [HttpPut("profile")]
     [ProducesResponseType(typeof(UserProfileDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
