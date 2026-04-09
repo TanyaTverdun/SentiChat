@@ -3,7 +3,7 @@
 /// <summary>
 /// Data transfer object for registering a new user.
 /// </summary>
-public class RegisterUserDto
+public record RegisterUserDto
 {
     /// <summary>
     /// User's display name

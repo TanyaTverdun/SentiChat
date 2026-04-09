@@ -3,7 +3,7 @@
 /// <summary>
 /// Data transfer object for user authentication.
 /// </summary>
-public class LoginUserDto
+public record LoginUserDto
 {
     /// <summary>
     /// The email address associated with the user account.

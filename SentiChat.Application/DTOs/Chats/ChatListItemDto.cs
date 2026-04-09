@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a summary of a chat for display in a list.
 /// </summary>
-public class ChatListItemDto
+public record ChatListItemDto
 {
     /// <summary>
     /// The unique identifier for the chat.
