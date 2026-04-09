@@ -1,4 +1,5 @@
 ﻿using SentiChat.Application.DTOs.Users;
+using SentiChat.Application.Extensions;
 using SentiChat.Application.Interfaces;
 using SentiChat.Application.Interfaces.Security;
 using SentiChat.Application.Mappers;
@@ -96,5 +97,66 @@ public class UserService : IUserService
             .GenerateToken(user);
 
         return token;
+    }
+
+    /// <inheritdoc />
+    public async Task<UserProfileDto> GetUserProfileAsync(
+        Guid userId,
+        CancellationToken cancellationToken)
+    {
+        var user = await this._userRepository
+            .GetByIdAsync(
+                userId, 
+                cancellationToken);
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException("User not found.");
+        }
+
+        string initials = user.Name.ToInitials();
+
+        return user.ToProfileDto(initials);
+    }
+
+    /// <inheritdoc />
+    public async Task<UserProfileDto> UpdateUserProfileAsync(
+        Guid userId,
+        UpdateProfileRequestDto request,
+        CancellationToken cancellationToken)
+    {
+        var user = await this._userRepository
+            .GetByIdAsync(
+                userId, 
+                cancellationToken);
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException("User not found.");
+        }
+
+        if (!string.Equals(
+            user.Email, 
+            request.Email, 
+            StringComparison.OrdinalIgnoreCase))
+        {
+            var emailExists = await this._userRepository
+                .ExistsByEmailAsync(
+                    request.Email, 
+                    cancellationToken);
+            if (emailExists)
+            {
+                throw new ArgumentException(
+                    $"Email {request.Email} is already in use.");
+            }
+        }
+
+        request.UpdateEntity(user);
+
+        await this._unitOfWork.SaveChangesAsync(cancellationToken);
+
+        string initials = user.Name.ToInitials();
+
+        return user.ToProfileDto(initials);
     }
 }
