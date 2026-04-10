@@ -4,6 +4,7 @@ using SentiChat.Application.Interfaces.AzureAI;
 using SentiChat.Application.Interfaces.Security;
 using SentiChat.Domain.Interfaces.Repositories;
 using SentiChat.Infrastructure.Configuration;
+using SentiChat.Infrastructure.Data;
 using SentiChat.Infrastructure.ExternalServices.AzureAI;
 using SentiChat.Infrastructure.Repositories;
 using SentiChat.Infrastructure.Security;
@@ -46,6 +47,8 @@ public static class DependencyInjection
 
         services.AddSingleton<
             ISentimentAnalysisService, SentimentAnalysisService>();
+
+        services.AddScoped<SentiChatDbInitializer>();
 
         return services;
     }

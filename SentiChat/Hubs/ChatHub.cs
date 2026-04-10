@@ -51,15 +51,15 @@ public class ChatHub : Hub
         var now = DateTime.UtcNow;
 
         var user = await _userRepository.GetByIdAsync(
-            userId, 
-            Context.ConnectionAborted);
+            userId,
+            CancellationToken.None);
 
         if (user != null)
         {
             user.IsOnline = false;
             user.LastSeen = now;
             await _unitOfWork
-                .SaveChangesAsync(Context.ConnectionAborted);
+                .SaveChangesAsync(CancellationToken.None);
         }
 
         await Clients.All.SendAsync(
